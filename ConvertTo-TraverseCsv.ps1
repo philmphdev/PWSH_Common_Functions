@@ -11,7 +11,7 @@ function ConvertTo-TraverseCsv
     Path to the original .csv file.
     
     .PARAMETER Delimiter
-    Defines the delimiter to use for Import and Export-Csv cmdlets.
+    Defines the delimiter to use for Import and Export-Csv cmdlets. Defaults to ','.
     
     .EXAMPLE
     PS C:\> Import-Csv -Path $File -Encoding UTF8                                                                                                                                                                                                                                  
@@ -27,7 +27,7 @@ function ConvertTo-TraverseCsv
     VERBOSE: New header: Column1,1,a,x,4
     VERBOSE: Starting traverse with for header Column2
     VERBOSE: Starting traverse with for header Column3
-    VERBOSE: Outputting to file D:\3 DEVOPS\GIT\PWSH_Common_Functions\test_Traverse.csv
+    VERBOSE: Outputting to file D:\test_Traverse.csv
  
 
     PS C:\> Import-Csv -Path $File2 -Encoding UTF8 | FT                                                                                                                                                                                            
@@ -50,8 +50,6 @@ function ConvertTo-TraverseCsv
     Creationdate:	11.07.2019
     #>
     
-    
-
     [CmdletBinding()]
     
     param (
@@ -73,15 +71,13 @@ function ConvertTo-TraverseCsv
     
     begin {
         Set-StrictMode -Version 2
-
-        $DestinationCsvData = [System.Collections.ArrayList]::new()
-    }
+    } # begin
     
     process {
         $SourceCsvData = Import-Csv -Path $SourceCsv -Delimiter $Delimiter -Encoding UTF8
 
-        # Get old header and create the new one
-        $OldHeader = @((Get-Content -Path $SourceCsv -Encoding UTF8 | Select-Object -First 1).Split($Delimiter))
+        # Get old header and create the new one; "[$([char]34)$([char]39)]" = ["']
+        $OldHeader = @(((Get-Content -Path $SourceCsv -Encoding UTF8 | Select-Object -First 1) -replace "[$([char]34)$([char]39)]", 'X').Split($Delimiter))
         $NewHeader = [System.Collections.ArrayList]::new()
         $NewHeader.Add($OldHeader[0]) | Out-Null
         $SourceCsvData | ForEach-Object -Process { $NewHeader.Add($_.($OldHeader[0])) } | Out-Null
@@ -90,6 +86,7 @@ function ConvertTo-TraverseCsv
         Write-Verbose -Message "New header: $($NewHeader -join $Delimiter)"
 
         $n = 1
+        $DestinationCsvData = [System.Collections.ArrayList]::new()
        
         foreach ($OldHeaderProp in ($OldHeader | Select-Object -Skip 1)) {
             $obj = [PSCustomObject] @{
@@ -105,13 +102,13 @@ function ConvertTo-TraverseCsv
                 $m++
             } # foreach
 
-            $DestinationCsvData.Add($obj) | Out-Null
             $n++
+            $DestinationCsvData.Add($obj) | Out-Null
         } # foreach
  
-        Write-Verbose -Message ('Outputting to file {0}' -f $SourceCsv.Replace('.csv', '_Traverse.csv'))
-        $DestinationCsvData | Export-Csv -Path $SourceCsv.Replace('.csv', '_Traverse.csv') -Delimiter $Delimiter -Encoding UTF8 -NoTypeInformation
-    }
+        Write-Verbose -Message ('Outputting to file {0}' -f $SourceCsv.Replace('.csv', '_traverse.csv'))
+        $DestinationCsvData | Export-Csv -Path $SourceCsv.Replace('.csv', '_traverse.csv') -Delimiter $Delimiter -Encoding UTF8 -NoTypeInformation
+    } # process
     
     end {}
 } # function
