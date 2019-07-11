@@ -1,4 +1,4 @@
-function ConvertTo-TraverseCsv
+function ConvertTo-InvertedCsv
 {
     <#
     .SYNOPSIS
@@ -23,11 +23,11 @@ function ConvertTo-TraverseCsv
     4       5       6
 
 
-    PS C:\> ConvertTo-TraverseCsv -SourceCsv $File -Verbose                                                                                                                                                                                                                        VERBOSE: Old header: Column1,Column2,Column3
+    PS C:\> ConvertTo-InvertedCsv -SourceCsv $File -Verbose                                                                                                                                                                                                                        VERBOSE: Old header: Column1,Column2,Column3
     VERBOSE: New header: Column1,1,a,x,4
-    VERBOSE: Starting traverse with for header Column2
-    VERBOSE: Starting traverse with for header Column3
-    VERBOSE: Outputting to file D:\test_Traverse.csv
+    VERBOSE: Starting convertion for header Column2
+    VERBOSE: Starting convertion for header Column3
+    VERBOSE: Outputting to file D:\test_Inverted.csv
  
 
     PS C:\> Import-Csv -Path $File2 -Encoding UTF8 | FT                                                                                                                                                                                            
@@ -95,7 +95,7 @@ function ConvertTo-TraverseCsv
 
             $m = 0
 
-            Write-Verbose -Message "Starting traverse with for header $($OldHeader[$n])"
+            Write-Verbose -Message "Starting convertion for header $($OldHeader[$n])"
 
             foreach ($NewHeaderProp in ($NewHeader | Select-Object -Skip 1)) {
                 $obj | Add-Member -MemberType NoteProperty -Name $NewHeaderProp -Value ($SourceCsvData[$m].($OldHeader[$n]))
@@ -106,8 +106,8 @@ function ConvertTo-TraverseCsv
             $DestinationCsvData.Add($obj) | Out-Null
         } # foreach
  
-        Write-Verbose -Message ('Outputting to file {0}' -f $SourceCsv.Replace('.csv', '_traverse.csv'))
-        $DestinationCsvData | Export-Csv -Path $SourceCsv.Replace('.csv', '_traverse.csv') -Delimiter $Delimiter -Encoding UTF8 -NoTypeInformation
+        Write-Verbose -Message ('Outputting to file {0}' -f $SourceCsv.Replace('.csv', '_inverted.csv'))
+        $DestinationCsvData | Export-Csv -Path $SourceCsv.Replace('.csv', '_inverted.csv') -Delimiter $Delimiter -Encoding UTF8 -NoTypeInformation
     } # process
     
     end {}
