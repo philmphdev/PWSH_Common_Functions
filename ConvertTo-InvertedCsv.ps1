@@ -77,7 +77,7 @@ function ConvertTo-InvertedCsv
         $SourceCsvData = Import-Csv -Path $SourceCsv -Delimiter $Delimiter -Encoding UTF8
 
         # Get old header and create the new one; "[$([char]34)$([char]39)]" = ["']
-        $OldHeader = @(((Get-Content -Path $SourceCsv -Encoding UTF8 | Select-Object -First 1) -replace "[$([char]34)$([char]39)]", 'X').Split($Delimiter))
+        $OldHeader = @(((Get-Content -Path $SourceCsv -Encoding UTF8 | Select-Object -First 1) -replace "[$([char]34)$([char]39)]", '').Split($Delimiter))
         $NewHeader = [System.Collections.ArrayList]::new()
         $NewHeader.Add($OldHeader[0]) | Out-Null
         $SourceCsvData | ForEach-Object -Process { $NewHeader.Add($_.($OldHeader[0])) } | Out-Null
