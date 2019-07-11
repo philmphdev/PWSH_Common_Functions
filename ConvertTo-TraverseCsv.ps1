@@ -1,0 +1,117 @@
+function ConvertTo-TraverseCsv
+{
+    <#
+    .SYNOPSIS
+    Converts a .csv file from header:cloumn to cloumn:header.
+    
+    .DESCRIPTION
+    Converts a .csv file from header:cloumn to cloumn:header.
+    
+    .PARAMETER SourceCsv
+    Path to the original .csv file.
+    
+    .PARAMETER Delimiter
+    Defines the delimiter to use for Import and Export-Csv cmdlets.
+    
+    .EXAMPLE
+    PS C:\> Import-Csv -Path $File -Encoding UTF8                                                                                                                                                                                                                                  
+    Column1 Column2 Column3
+    ------- ------- -------
+    1       2       3
+    a       b       c
+    x       y       z
+    4       5       6
+
+
+    PS C:\> ConvertTo-TraverseCsv -SourceCsv $File -Verbose                                                                                                                                                                                                                        VERBOSE: Old header: Column1,Column2,Column3
+    VERBOSE: New header: Column1,1,a,x,4
+    VERBOSE: Starting traverse with for header Column2
+    VERBOSE: Starting traverse with for header Column3
+    VERBOSE: Outputting to file D:\3 DEVOPS\GIT\PWSH_Common_Functions\test_Traverse.csv
+ 
+
+    PS C:\> Import-Csv -Path $File2 -Encoding UTF8 | FT                                                                                                                                                                                            
+    Column1 1 a x 4
+    ------- - - - -
+    Column2 2 b y 5
+    Column3 3 c z 6
+    
+    .INPUTS
+    -
+    
+    .OUTPUTS
+    -
+    
+    .NOTES
+    Author:			Philipp Maier
+    Github:			https://github.com/philmph
+    Repository:		https://github.com/philmph/PWSH_Common_Functions
+    
+    Creationdate:	11.07.2019
+    #>
+    
+    
+
+    [CmdletBinding()]
+    
+    param (
+        [Parameter(Mandatory=$true,
+                   Position=0)]
+        [ValidateScript({
+            if (Test-Path -Path $_ -PathType Leaf) {
+                $true
+            } else {
+                $false
+            }
+        })]
+        [string]$SourceCsv,
+
+        [Parameter(Mandatory=$false,
+                   Position=1)]
+        [char]$Delimiter = ','
+    )
+    
+    begin {
+        Set-StrictMode -Version 2
+
+        $DestinationCsvData = [System.Collections.ArrayList]::new()
+    }
+    
+    process {
+        $SourceCsvData = Import-Csv -Path $SourceCsv -Delimiter $Delimiter -Encoding UTF8
+
+        # Get old header and create the new one
+        $OldHeader = @((Get-Content -Path $SourceCsv -Encoding UTF8 | Select-Object -First 1).Split($Delimiter))
+        $NewHeader = [System.Collections.ArrayList]::new()
+        $NewHeader.Add($OldHeader[0]) | Out-Null
+        $SourceCsvData | ForEach-Object -Process { $NewHeader.Add($_.($OldHeader[0])) } | Out-Null
+
+        Write-Verbose -Message "Old header: $($OldHeader -join $Delimiter)"
+        Write-Verbose -Message "New header: $($NewHeader -join $Delimiter)"
+
+        $n = 1
+       
+        foreach ($OldHeaderProp in ($OldHeader | Select-Object -Skip 1)) {
+            $obj = [PSCustomObject] @{
+                $NewHeader[0] = $OldHeader[$n]
+            }
+
+            $m = 0
+
+            Write-Verbose -Message "Starting traverse with for header $($OldHeader[$n])"
+
+            foreach ($NewHeaderProp in ($NewHeader | Select-Object -Skip 1)) {
+                $obj | Add-Member -MemberType NoteProperty -Name $NewHeaderProp -Value ($SourceCsvData[$m].($OldHeader[$n]))
+                $m++
+            } # foreach
+
+            $DestinationCsvData.Add($obj) | Out-Null
+            $n++
+        } # foreach
+ 
+        Write-Verbose -Message ('Outputting to file {0}' -f $SourceCsv.Replace('.csv', '_Traverse.csv'))
+        $DestinationCsvData | Export-Csv -Path $SourceCsv.Replace('.csv', '_Traverse.csv') -Delimiter $Delimiter -Encoding UTF8 -NoTypeInformation
+    }
+    
+    end {}
+} # function
