@@ -11,7 +11,7 @@ function Get-GPONotLinkedReport {
     
     .EXAMPLE
     PS C:\> Get-GPONotLinkedReport
-    
+
     Name       CreatedTime         ModifiedTime       
     ----       -----------         ------------       
     Not Linked 12.07.2019 13:43:38 12.07.2019 13:43:38
@@ -47,8 +47,8 @@ function Get-GPONotLinkedReport {
     
     process {
         Write-Verbose -Message "Domain is: $Domain"
-        If ([string]::IsNullOrEmpty($Domain)) {
-            Throw 'Not in a windows domain'
+        if ([string]::IsNullOrEmpty($Domain)) {
+            throw 'Not in a windows domain'
         }
 
         # Save full XML GPO report in variable to parse
