@@ -10,7 +10,26 @@ function Get-ADDirectoryServerOperationMasterRole {
     Defines one or more domainnames to query for fsmo owners. Defaults to env:USERDNSDOMAIN.
     
     .EXAMPLE
-    Another example of how to use this cmdlet
+    PS C:\> Get-ADDirectoryServerOperationMasterRole -DomainName 'pmaier.lab'
+    
+
+    DomainName           : pmaier.lab
+    DomainNamingMaster   : WIN-5LI9IQMANGJ.pmaier.lab
+    SchemaMaster         : WIN-5LI9IQMANGJ.pmaier.lab
+    InfrastructureMaster : WIN-5LI9IQMANGJ.pmaier.lab
+    PDCEmulator          : WIN-5LI9IQMANGJ.pmaier.lab
+    RIDMaster            : WIN-5LI9IQMANGJ.pmaier.lab
+
+    .EXAMPLE
+    PS C:\> 'pmaier.lab' | Get-ADDirectoryServerOperationMasterRole
+
+
+    DomainName           : pmaier.lab
+    DomainNamingMaster   : WIN-5LI9IQMANGJ.pmaier.lab
+    SchemaMaster         : WIN-5LI9IQMANGJ.pmaier.lab
+    InfrastructureMaster : WIN-5LI9IQMANGJ.pmaier.lab
+    PDCEmulator          : WIN-5LI9IQMANGJ.pmaier.lab
+    RIDMaster            : WIN-5LI9IQMANGJ.pmaier.lab
     
     .INPUTS
     [System.String]
