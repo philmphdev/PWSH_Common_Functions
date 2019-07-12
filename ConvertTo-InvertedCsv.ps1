@@ -1,5 +1,4 @@
-function ConvertTo-InvertedCsv
-{
+function ConvertTo-InvertedCsv {
     <#
     .SYNOPSIS
     Converts a .csv file from header:cloumn to cloumn:header.
