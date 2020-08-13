@@ -29,9 +29,6 @@ function Test-PasswordComplexity
     .NOTES
     Author:			Philipp Maier
     Author Git:		https://github.com/philmph
-    Repository:		https://github.com/philmph/PWSH_Common_Functions
-    
-    Creationdate:	16.01.2020
     #>
 
     [CmdletBinding()]

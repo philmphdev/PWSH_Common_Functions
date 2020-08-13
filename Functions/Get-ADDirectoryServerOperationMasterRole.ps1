@@ -39,11 +39,7 @@ function Get-ADDirectoryServerOperationMasterRole {
     
     .NOTES
     Author:			Philipp Maier
-    Github:			https://github.com/philmph
-    Repository:		https://github.com/philmph/PWSH_Common_Functions
-    
-    Creationdate:	-
-    Version:		1.0
+    Author Git:		https://github.com/philmph
     #>
     
     [CmdletBinding()]

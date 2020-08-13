@@ -32,12 +32,11 @@ function ConvertTo-CSVMailAttachment {
     
     .NOTES
     Author:			Philipp Maier
-    Author Git:		https://github.com/philmphdev
+    Author Git:		https://github.com/philmph
 
     Original idea from
     https://stackoverflow.com/questions/57035997/sending-e-mail-with-attachment-in-powershell
     #>
-    
     
     [CmdletBinding()]
 

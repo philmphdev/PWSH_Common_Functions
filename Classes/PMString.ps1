@@ -13,7 +13,7 @@ Call with [PMString]::Trunctuate($String, $Length) to trunctuate.
 Call with [PMString]::ToCyrillic($String) to convert a string to Cyrillic.
 
 Link:
-https://github.com/philmphdev/PWSH_Common_Functions
+https://github.com/philmph/PWSH_Common_Functions
 #################################################################
 #>
 

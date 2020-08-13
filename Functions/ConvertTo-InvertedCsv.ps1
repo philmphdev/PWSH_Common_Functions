@@ -43,10 +43,7 @@ function ConvertTo-InvertedCsv {
     
     .NOTES
     Author:			Philipp Maier
-    Github:			https://github.com/philmph
-    Repository:		https://github.com/philmph/PWSH_Common_Functions
-    
-    Creationdate:	11.07.2019
+    Author Git:		https://github.com/philmph
     #>
     
     [CmdletBinding()]

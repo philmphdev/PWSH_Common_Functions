@@ -24,8 +24,11 @@ Function Convert-UmlautToHTML
     
     .OUTPUTS
     [System.String]
+
+    .NOTES
+    Author:			Philipp Maier
+    Author Git:		https://github.com/philmph
     #>
-    
 
     [CmdletBinding()]
     
