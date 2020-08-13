@@ -34,7 +34,11 @@ function ConvertTo-CSVMailAttachment {
     Author:			Philipp Maier
     Author Git:		https://github.com/philmph
 
-    Original idea from
+    
+    .LINK
+    https://github.com/philmph/PWSH_Common_Functions
+
+    .LINK
     https://stackoverflow.com/questions/57035997/sending-e-mail-with-attachment-in-powershell
     #>
     
